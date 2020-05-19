@@ -1,6 +1,7 @@
 const express = require('express')
 const routes = express.Router()
 const { celebrate, Joi, Segments } = require('celebrate')
+const authMiddleware = require('./middlewares/authMiddleware')
 const DoctorController = require('./controllers/DoctorController')
 const LoginController = require('./controllers/LoginController')
 
@@ -19,7 +20,7 @@ routes.post('/doctor', celebrate({
     })
 }), DoctorController.create)
 
-routes.put('/doctor/:crm', celebrate({
+routes.put('/doctor/:crm', authMiddleware, celebrate({
     [Segments.PARAMS] : Joi.object().keys({
         crm: Joi.string().required()
     }),
@@ -33,7 +34,7 @@ routes.put('/doctor/:crm', celebrate({
     })
 }), DoctorController.update)
 
-routes.delete('/doctor/:crm', celebrate({
+routes.delete('/doctor/:crm', authMiddleware, celebrate({
     [Segments.PARAMS] : Joi.object().keys({
         crm: Joi.string().required()
     })

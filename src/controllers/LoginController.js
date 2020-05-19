@@ -1,25 +1,31 @@
 const Doctor = require('../models/Doctor')
+const bcrypt = require('bcryptjs')
+const tokenGenerator = require('../utils/tokenGenerator')
 
 module.exports = {
     async sigin(request, response){
         const { crm, password } = request.body
 
         try {
-            const doctorCrm = await Doctor.findOne({ crm })
-            const doctorPassword = await Doctor.findOne({ password })
+            const doctor = await Doctor.findOne({ crm }).select('+password')
 
-            if(!doctorCrm || doctorCrm == ""){
+            if(!doctor || doctor == ""){
                 return response.status(404).json({ error: 'CRM not found' })
             }
 
-            if(!doctorPassword || doctorPassword == ""){
+            if(!await bcrypt.compare(password, doctor.password)){
                 return response.status(404).json({ error: 'Password incorrect' })
             }
 
-            return response.status(201).json({ message: 'User sign-in succesfull' })
+            return response.send({ 
+                doctor, 
+                token: tokenGenerator({ crm: doctor.crm }) 
+            })
 
         } catch (error) {
             return response.status(404).json({ error: 'Sigin error' })
         }
+
+        
     }
 }
