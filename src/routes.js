@@ -14,7 +14,7 @@ routes.post('/doctor', celebrate({
         name: Joi.string().required().min(3),
         crm: Joi.string().required().min(3),
         speciality: Joi.string().required().min(4),
-        phone: Joi.string().required().min(10).max(11),
+        phone: Joi.string().required().min(10).max(12),
         city: Joi.string().required().min(4),
         password: Joi.string().required().length(6),
     })
@@ -22,13 +22,13 @@ routes.post('/doctor', celebrate({
 
 routes.put('/doctor/:crm', authMiddleware, celebrate({
     [Segments.PARAMS] : Joi.object().keys({
-        crm: Joi.string().required()
+        crm: Joi.string().required().min(7)
     }),
 
     [Segments.BODY] : Joi.object().keys({
         name: Joi.string().required().min(3),
         speciality: Joi.string().required().min(4),
-        phone: Joi.string().required().min(10).max(11),
+        phone: Joi.string().required().min(10).max(12),
         city: Joi.string().required().min(4),
         password: Joi.string().required().length(6),
     })

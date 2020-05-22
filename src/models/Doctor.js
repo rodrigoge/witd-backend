@@ -3,9 +3,9 @@ const bcrypt = require('bcryptjs')
 
 const DoctorSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    crm: { type: String, required: true, unique: true },
+    crm: { type: String, required: true, unique: true, maxlength: 7 },
     speciality: { type: String, required: true },
-    phone: { type: String, required: true },
+    phone: { type: String, required: true, maxlength: 12 },
     city: { type: String, required: true },
     password: { type: String, required: true, select: false }
 })
